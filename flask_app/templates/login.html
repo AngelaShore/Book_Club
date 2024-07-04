@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #ff7e5f, #feb47b); /* Smooth gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0; /* Remove default body margin */
+        }
+        .login-container {
+            width: 90%; /* Adjusted width */
+            max-width: 400px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .login-header {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ff7e5f; /* Custom primary color */
+        }
+        .form-control {
+            border-radius: 20px;
+            height: 50px;
+        }
+        .btn-custom {
+            background-color: #ff7e5f;
+            color: white;
+            border-radius: 20px;
+            height: 50px;
+            width: 100%;
+        }
+        .btn-custom:hover {
+            background-color: #feb47b; /* Darker shade for hover */
+        }
+        .text-center a {
+            color: #ff7e5f;
+        }
+        /* Custom spacing adjustments */
+        .mb-4-custom {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2 class="login-header">Login</h2>
+    <form action="/login" method="post">
+        <div class="form-group mb-4-custom">
+          <label for="email">Email address</label>
+          <input type="email" name="email" class="form-control" id="email" required>
+          {% with messages = get_flashed_messages(category_filter=["emailLogin"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                <small class="form-text text-danger">{{ message }}</small>
+                {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div class="form-group mb-4-custom">
+          <label for="password">Password</label>
+          <input type="password" name="password" class="form-control" id="password" required>
+          {% with messages = get_flashed_messages(category_filter=["passwordLogin"]) %}
+            {% if messages %}
+                {% for message in messages %}
+                <small class="form-text text-danger">{{ message }}</small>
+                {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+        <button type="submit" class="btn btn-custom">Login</button>
+      </form>
+      <div class="text-center mt-3">
+        <p class="my-0">Don't have an account yet?</p>
+        <a href="/register">Register</a>
+      </div>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

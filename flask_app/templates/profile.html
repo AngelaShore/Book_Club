@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>    
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        .profile-header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .profile-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+        .btn-edit {
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-edit:hover {
+            background-color: #ffca2c;
+            color: white;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+            color: white;
+        }
+    </style>
+</head>
+<body style="background-color: #f0f0f0;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Profile</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="profile-container mt-4">
+            <h2 class="text-center mb-4">{{ loggedUser.firstName }}'s Information</h2>
+            <div class="text-center mb-3">
+                <h5>Full Name: {{ loggedUser.firstName }} {{ loggedUser.lastName }}</h5>
+                <h5>Email: {{ loggedUser.email }}</h5>
+            </div>
+            <div class="d-flex justify-content-center gap-3">
+                <a class="btn btn-warning btn-edit" href="/edit/user">Edit</a>
+                <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteUser">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="deleteUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure that you want to delete your account? There is no going back!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a type="button" href="/delete/user" class="btn btn-danger">I'm Sure</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .navbar {
+            background-color: #343a40;
+            color: white;
+        }
+        .card {
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .card-text {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .btn {
+            transition: background-color 0.3s ease-in-out;
+        }
+        .btn:hover {
+            filter: brightness(90%);
+        }
+        .btn-primary, .btn-success, .btn-warning, .btn-danger {
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        .form-control {
+            border-color: #ced4da;
+            border-radius: 5px;
+        }
+        .border-1 {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .btn-sm {
+            font-size: 0.9rem;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Books</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{book.title}}</h5>
+                        <p class="card-text">Description: {{book.description}}</p>
+                        <p class="card-text">Author: {{book.author}}</p>
+                        <p class="card-text">Nr of pages: {{book.nrOfPages}}</p>
+                        <p class="card-text">Price: ${{book.price}}</p>
+                        <p class="card-text">Created by: {{book.firstName}} {{book.lastName}}</p>
+                        <p class="card-text" onmouseenter="displayLikes()" onmouseleave="hideLikes()">
+                            Likes: {{usersWhoLikes|length}}
+                        </p>
+                        <div>
+                            {% if session['user_id'] in usersWhoLikes %}
+                                <a href="/remove/like/{{book.id}}" class="btn btn-danger btn-sm">Unlike</a>
+                            {% else %}
+                                <a href="/add/like/{{book.id}}" class="btn btn-primary btn-sm">Like</a>
+                            {% endif %}
+                        </div>
+                        <div class="usersWhoLiked">
+                            {% for user in book.likes %}
+                                <p>{{user.firstName}} {{user.lastName}}</p>
+                            {% endfor %}
+                        </div>
+                        {% if session['user_id'] == book.user_id %}
+                            <a href="/book/edit/{{book.id}}" class="btn btn-warning mt-3 me-2">Edit book</a>
+                            <a href="/book/delete/{{book.id}}" class="btn btn-danger mt-3">Delete Book</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">Add your comment</h4>
+                        <form action="/add/comment/{{book.id}}" method="post">
+                            <div class="mb-3">
+                                <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Write your comment here..."></textarea>
+                            </div>
+                            {% with messages = get_flashed_messages(category_filter=["comment"]) %}
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <p class="text-danger text-center">{{ message }}</p>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                            <button type="submit" class="btn btn-success w-100">Add</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h2 class="text-center mb-3">Comments</h2>
+                    {% for komenti in book.comments %}
+                        <div class="border-1">
+                            <p>Comment: {{komenti.comment}}</p>
+                            <p>Written by: {{komenti.firstName}} {{komenti.lastName}}</p>
+                            <p>Created: {{komenti.created_at.strftime('%Y-%m-%d')}}</p>
+                            {% if komenti.user_id == session['user_id'] %}
+                                <a href="/edit/comment/{{komenti.id}}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="/delete/comment/{{komenti.id}}" class="btn btn-danger btn-sm">Delete</a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function displayLikes() {
+            document.querySelector('.usersWhoLiked').style.display = 'block';
+        }
+        function hideLikes() {
+            document.querySelector('.usersWhoLiked').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
